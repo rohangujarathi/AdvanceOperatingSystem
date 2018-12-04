@@ -13,13 +13,13 @@ import com.umbc.aos.beans.WebServiceBean;
 public class RegistryCleaner implements Runnable{
 	@Override
 	public void run() {
-		System.out.println("Starting the Cleaning Service");
+		System.out.println("WebRegistry: Starting the Cleaning Service");
 		try {
 
 			while(true) {
 				// TODO Auto-generated method stub
 				while(Registry.getServiceMap().size() <= 0) {
-					System.out.println("Registry is empty going to sleep");
+					System.out.println("WebRegistry: Registry is empty going to sleep");
 					Thread.sleep(5000);
 				}
 				Map<String, List<WebServiceBean>> registry = Registry.getServiceMap();
@@ -47,12 +47,12 @@ public class RegistryCleaner implements Runnable{
 
 				}
 
-				System.out.println("Sleeping for 5 seconds");
+				System.out.println("WebRegistry: Sleeping for 5 seconds");
 				Thread.sleep(10000);
 			} 
 		}catch (InterruptedException e) {
 			// TODO Auto-generated catch block
-			System.out.println("Thread Error: "+ RegistryCleaner.class);
+			System.out.println("WebRegistry: Thread Error: "+ RegistryCleaner.class);
 			e.printStackTrace();
 		}
 	}

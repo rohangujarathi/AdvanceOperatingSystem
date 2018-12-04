@@ -2,6 +2,10 @@ package com.umbc.aos.beans;
 
 import java.util.List;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
+
+@XmlRootElement(name="listofwebservicebean")
 public class ListofWebserviceBean {
 	
 	List<WebServiceBean> listOfBeans;

@@ -1,5 +1,6 @@
 package com.umbc.aos.ws;
 
+import javax.jws.WebParam;
 import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
 import javax.jws.soap.SOAPBinding.Style;
@@ -14,5 +15,6 @@ import com.umbc.aos.beans.WebServiceBean;
 public interface RegistryService {
 	public boolean AddService(WebServiceBean webBean);
 	public boolean DeleteService(WebServiceBean webBean);
-	public ListofWebserviceBean SearchService(WebServiceBean webBean);	
+	public ListofWebserviceBean SearchService(WebServiceBean webBean);
+	public ListofWebserviceBean getAllWebServiceDetails(); //exposed for the load balancer
 }

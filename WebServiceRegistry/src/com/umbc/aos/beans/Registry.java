@@ -15,12 +15,13 @@ import java.util.Map;
 import com.umbc.aos.util.RegistryCleaner;
 
 public class Registry {
+	//map containing entry for each service as <Service Name> : <name, ipaddress, wsdllocation>
 	private static Map<String, List<WebServiceBean>> serviceMap;
-	private static final String FILENAME = Registry.class.getProtectionDomain().getCodeSource().getLocation().getPath()+ "\\Registry.txt";
+	private static final String FILENAME = Registry.class.getProtectionDomain().getCodeSource().getLocation().getPath()+ "\\Registry3.txt";
 	private static final boolean enableCleaning = true;
 	static
 	{
-		System.out.println("Initializing Registry..");
+		System.out.println("WebRegistry: Initializing Registry..");
 		//CreateFile(FILENAME);
 		final File f = new File(Registry.class.getProtectionDomain().getCodeSource().getLocation().getPath());
 		System.out.println(f.getParentFile());
@@ -48,17 +49,18 @@ public class Registry {
 	 */
 	public static boolean add(WebServiceBean entry) {
 		if (null != entry) {
-			if (null != entry && serviceMap.containsKey(entry.getName())) {
+			entry.setName(entry.getName().toLowerCase());
+			if (serviceMap.containsKey(entry.getName())) {
 				List<WebServiceBean> nodeList = serviceMap.get(entry.getName());
 				if (!nodeList.contains(entry)) {
 					nodeList.add(entry);
 				}
-				serviceMap.put(entry.getName().toLowerCase(), nodeList);
+				serviceMap.put(entry.getName(), nodeList);
 
 			}else {
 				ArrayList<WebServiceBean> nodeList = new ArrayList<>();
 				nodeList.add(entry);
-				serviceMap.put(entry.getName().toLowerCase(), nodeList);
+				serviceMap.put(entry.getName(), nodeList);
 
 			}
 			saveChangesToFile(serviceMap);
@@ -77,6 +79,7 @@ public class Registry {
 	public static boolean remove(WebServiceBean entry) {
 
 		if(null != entry) {
+			entry.setName(entry.getName().toLowerCase());
 			for(String key:serviceMap.keySet()) {
 				List<WebServiceBean> nodes= serviceMap.get(key);
 				Iterator<WebServiceBean> it = nodes.iterator();
@@ -100,11 +103,13 @@ public class Registry {
 	 * @param entry
 	 * @return
 	 */
-	public static List<WebServiceBean> getValue(WebServiceBean entry) {
+	public static List<WebServiceBean> getService(WebServiceBean entry) {
+		
 		System.out.println("in the get value "+ entry.getName());
 		if(null != entry && null != entry.getName() && !"".equals(entry.getName())) {
+			entry.setName(entry.getName().toLowerCase());
 			System.out.println(serviceMap);
-			return serviceMap.get(entry.getName().toLowerCase());
+			return serviceMap.get(entry.getName());
 		}else {
 			return null;
 		}
@@ -152,13 +157,13 @@ public static void main(String[] args) {
 			in.close();
 			file.close();
 			//log
-			System.out.println("loadChangesFromFile" + serviceMap);
+			System.out.println("WebRegistry: loadChangesFromFile" + serviceMap);
 
 		} catch (IOException | ClassNotFoundException e) {
 
 			// TODO Auto-generated catch block
-			e.printStackTrace();
-			System.out.println("Error: Method " + "loadChangesFromFile" + Registry.class);
+			//e.printStackTrace();
+			System.out.println("WebRegistory: Error: Method " + "loadChangesFromFile" + Registry.class);
 		}
 		return serviceMap;
 	}
@@ -177,10 +182,10 @@ public static void main(String[] args) {
 			file.close(); 
 
 			//log
-			System.out.println("saveChangesToFile" + serviceMap);
+			System.out.println("WebRegistry: saveChangesToFile" + serviceMap);
 		} catch(IOException ex){
-			ex.printStackTrace();
-			System.out.println("Error: Method " + "saveChangesToFile" + Registry.class);
+			//ex.printStackTrace();
+			System.out.println("WebRegistry: Error: Method " + "saveChangesToFile" + Registry.class);
 			return false;
 		}
 		return true;
@@ -198,8 +203,8 @@ public static void main(String[] args) {
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
-			System.out.println("Error:" + "CreateFile" + Registry.class);
+			//e.printStackTrace();
+			System.out.println("WebRegistry: Error:" + "CreateFile" + Registry.class);
 			return false;
 		}
 
