@@ -38,10 +38,12 @@ public class LoadInformation {
 	}
 	//taking all the webservices available at webregistry
 	public static boolean addAllWebService(List<WebServiceBean> listOfAllWebService) {
+		wsdlinfo.clear();
 		for(WebServiceBean wsb: listOfAllWebService) {
 			if(wsdlinfo.containsKey(wsb.getName())) {
 				List<String> list = wsdlinfo.get(wsb.getName());
-				list.add(wsb.getWSDLLocation());
+				if(!list.contains(wsb.getWSDLLocation()))
+					list.add(wsb.getWSDLLocation());
 			}else {
 				List<String> list = new ArrayList<String>();
 				list.add(wsb.getWSDLLocation());

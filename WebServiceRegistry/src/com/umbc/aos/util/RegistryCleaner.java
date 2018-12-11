@@ -1,7 +1,9 @@
 package com.umbc.aos.util;
 
 import java.io.IOException;
+import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.net.SocketAddress;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -34,12 +36,17 @@ public class RegistryCleaner implements Runnable{
 					//splitting the IP:port into IP and port 
 					String serverAddress = server.split(":")[0];
 					int TcpServerPort = Integer.parseInt(server.split(":")[1]);
-					try (Socket s = new Socket(serverAddress, TcpServerPort)) {
-
+					try {
+						Socket s = new Socket();
+						SocketAddress addr = new InetSocketAddress(serverAddress, TcpServerPort);
+						System.out.println("connecting " + server);
+						s.connect(addr, 10000);
+				
 					} catch (IOException ex) {
 						/* ignore */
 						//since the server was not available
-						System.out.println("The "+serverAddress+" is not alive..removing");
+						ex.printStackTrace();
+						System.out.println("WebRegistry: The "+serverAddress+" is not alive..removing");
 						WebServiceBean wb = new WebServiceBean();
 						wb.setiPAddress(serverAddress+":"+TcpServerPort);
 						Registry.remove(wb);
@@ -48,7 +55,7 @@ public class RegistryCleaner implements Runnable{
 				}
 
 				System.out.println("WebRegistry: Sleeping for 5 seconds");
-				Thread.sleep(10000);
+				Thread.sleep(5000);
 			} 
 		}catch (InterruptedException e) {
 			// TODO Auto-generated catch block

@@ -17,7 +17,7 @@ import com.umbc.aos.util.RegistryCleaner;
 public class Registry {
 	//map containing entry for each service as <Service Name> : <name, ipaddress, wsdllocation>
 	private static Map<String, List<WebServiceBean>> serviceMap;
-	private static final String FILENAME = Registry.class.getProtectionDomain().getCodeSource().getLocation().getPath()+ "\\Registry3.txt";
+	private static final String FILENAME = Registry.class.getProtectionDomain().getCodeSource().getLocation().getPath()+ "\\Registry4.txt";
 	private static final boolean enableCleaning = true;
 	static
 	{
@@ -79,7 +79,6 @@ public class Registry {
 	public static boolean remove(WebServiceBean entry) {
 
 		if(null != entry) {
-			entry.setName(entry.getName().toLowerCase());
 			for(String key:serviceMap.keySet()) {
 				List<WebServiceBean> nodes= serviceMap.get(key);
 				Iterator<WebServiceBean> it = nodes.iterator();
