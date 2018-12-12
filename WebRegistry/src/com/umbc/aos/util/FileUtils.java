@@ -7,11 +7,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.InetSocketAddress;
+import java.net.Socket;
+import java.net.SocketAddress;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
-import com.umbc.aos.beans.Registry;
 import com.umbc.aos.beans.WebServiceBean;
 
 public class FileUtils {
@@ -103,6 +105,19 @@ public class FileUtils {
 			}
 		}
 		return "";
+	}
+	
+	public static boolean isAlive(String ip, int port) {
+		try {
+			Socket s = new Socket();
+			SocketAddress addr = new InetSocketAddress(ip, port);
+			System.out.println("connecting " + ip);
+			s.connect(addr, 2000);
+			return true;
+		} catch (Exception ex) {
+			return false;
+		}
+		
 	}
 }
 

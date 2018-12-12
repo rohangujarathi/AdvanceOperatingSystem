@@ -35,17 +35,8 @@ public class RegistryCleaner implements Runnable{
 					//splitting the IP:port into IP and port 
 					String serverAddress = server.split(":")[0];
 					int TcpServerPort = Integer.parseInt(server.split(":")[1]);
-					try {
-						Socket s = new Socket();
-						SocketAddress addr = new InetSocketAddress(serverAddress, TcpServerPort);
-						System.out.println("connecting " + server);
-						s.connect(addr, 2000);
-				
-					} catch (Exception ex) {
-						/* ignore */
-						//since the server was not available
-						ex.printStackTrace();
-						System.out.println("WebRegistry: The "+serverAddress+" is not alive..removing");
+					if(!FileUtils.isAlive(serverAddress, TcpServerPort)) {
+						System.out.println("WebRegistry: The "+serverAddress+":"+TcpServerPort+" is not alive..removing");
 						WebServiceBean wb = new WebServiceBean();
 						wb.setiPAddress(serverAddress+":"+TcpServerPort);
 						Registry.remove(wb);

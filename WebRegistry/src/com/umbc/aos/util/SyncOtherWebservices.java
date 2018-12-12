@@ -1,18 +1,36 @@
 package com.umbc.aos.util;
 
-public class SyncOtherWebservices implements Runnable{
+import java.util.Iterator;
+import java.util.Map.Entry;
+
+import com.umbc.aos.beans.WebServiceBean;
+
+public class SyncOtherWebservices implements Runnable {
 
 	@Override
 	public void run() {
-		// TODO Auto-generated method stub
-		while(RegistryUtil.buffer.isEmpty()) {
+		while (true) {
 			try {
-				Thread.sleep(5000);
+				if (RegistryUtil.buffer.isEmpty()) {
+					System.out.println("WebRegistry- SyncOtherRegistry: Buffer is empty");
+					Thread.sleep(5000);
+				} else {
+					Iterator<Entry<String, WebServiceBean>> iter = RegistryUtil.buffer.entrySet().iterator();
+					while (iter.hasNext()) {
+						Entry<String, WebServiceBean> entry = iter.next();
+						String key = entry.getKey();
+						WebServiceBean value = entry.getValue();
+						boolean flag = RegistryUtil.ClientCalltoRegistry(key, value);
+						if (flag) {
+							iter.remove();
+						}
+					}
+				}
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				System.out.println("WebRegistry: Error While In SyncOtherWebService Thread");
+			} catch (Exception e) {
+				System.out.println("WebRegistry: Error While In SyncOtherWebService Thread");
 			}
 		}
 	}
-
 }

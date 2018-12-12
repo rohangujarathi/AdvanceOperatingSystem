@@ -1,5 +1,8 @@
 package com.umbc.aos.util;
 import java.io.StringReader;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
 import javax.xml.namespace.QName;
 import javax.xml.soap.MessageFactory;
 import javax.xml.soap.SOAPMessage;
@@ -8,16 +11,12 @@ import javax.xml.transform.stream.StreamSource;
 import javax.xml.ws.Dispatch;
 import javax.xml.ws.Service;
 import javax.xml.ws.soap.SOAPBinding;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 import com.umbc.aos.beans.WebServiceBean;
 
 public class RegistryUtil {
 	
 	public static Map<String, WebServiceBean> buffer = new ConcurrentHashMap<String, WebServiceBean>();
-	
 	
 	public static boolean sendInformationToRegistry(WebServiceBean wb) throws Exception {
 		String[] registries = FileUtils.getProperty("registries").split(",");
@@ -47,7 +46,7 @@ public class RegistryUtil {
 		catch (Exception e) {
 			// TODO: handle exception
 			System.out.println("ClientCalltoRegistry failed");
-			throw e;
+			return false;
 		}
 		return true;
 	}
