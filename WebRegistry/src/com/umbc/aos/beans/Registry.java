@@ -1,13 +1,7 @@
 package com.umbc.aos.beans;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -16,12 +10,13 @@ import java.util.concurrent.ConcurrentHashMap;
 import com.umbc.aos.util.FileUtils;
 import com.umbc.aos.util.RegistryCleaner;
 import com.umbc.aos.util.RegistryUtil;
+import com.umbc.aos.util.SyncOtherWebservices;
 
 public class Registry {
 	//map containing entry for each service as <Service Name> : <name, ipaddress, wsdllocation>
 	private static Map<String, List<WebServiceBean>> serviceMap;
 	private static final String FILENAME = Registry.class.getProtectionDomain().getCodeSource().getLocation().getPath()+ "\\Registry4.txt";
-	private static final boolean enableCleaning = true;
+	private static final boolean enableCleaning = false;
 	static
 	{
 		System.out.println("WebRegistry: Initializing Registry..");
@@ -38,6 +33,10 @@ public class Registry {
 			Thread t = new Thread(rc);
 			t.start();
 		}
+		//start Sending the buffered details
+		SyncOtherWebservices sows = new SyncOtherWebservices();
+		Thread t = new Thread(sows);
+		//t.start();
 	}
 
 
