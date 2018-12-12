@@ -10,6 +10,13 @@ import com.umbc.aos.ws.WebServiceBean;
 public class LoadInformation {
 	private static Map<String, List<String>> wsdlinfo = new HashMap<String, List<String>>();
 	private static Map<String, Integer> loadinfo = new HashMap<String, Integer>();
+	
+	public static Map<String, Integer> getLoadinfo() {
+		return loadinfo;
+	}
+	public static void setLoadinfo(Map<String, Integer> loadinfo) {
+		LoadInformation.loadinfo = loadinfo;
+	}
 	public static Map<String, List<String>> getWsdlinfo() {
 		return wsdlinfo;
 	}
