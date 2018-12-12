@@ -12,16 +12,23 @@ import javax.xml.ws.Dispatch;
 import javax.xml.ws.Service;
 import javax.xml.ws.soap.SOAPBinding;
 
+import com.umbc.aos.add.Utils;
+
 public class WebServiceClient {
 	public static void addServicetoRegistry(String registrywsdl, String name) throws Exception{
 		try {
+			String port = Utils.getProperty("servicePort");
 		InetAddress ip = InetAddress.getLocalHost();
-		String ipaddress = ip.getHostAddress()+':'+ 8080;
+		String ipaddress = ip.getHostAddress()+':'+ port;
 		String serviceName = name;
 		QName qserviceName = new QName("http://ws.aos.umbc.com/", "RegistryServiceImplService");
 	    QName portName = new QName("http://ws.aos.umbc.com/", "RegistryServiceImplPort");
-	    String servicewsdl = "http://"+ip.getHostAddress()+":8080/AdditionWS/AddNumbers?wsdl";
+	    String servicewsdl = "http://"+ip.getHostAddress()+":" + port +"/AdditionWS/AddNumbers?wsdl";
     	String request = generateRequestXML(servicewsdl, ipaddress, serviceName);
+    	System.out.println(qserviceName);
+    	System.out.println(portName);
+    	System.out.println(registrywsdl);
+    	System.out.println(request);
     	invoke(qserviceName, portName, registrywsdl, "AddService", request);
 	}
 		catch (Exception e) {
@@ -80,6 +87,7 @@ public class WebServiceClient {
 		}
 		catch(Exception e){
 			System.out.println("invoke method failed");
+//			e.printStackTrace();
 			throw e;
 		}
     }

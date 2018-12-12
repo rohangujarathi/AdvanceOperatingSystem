@@ -81,11 +81,11 @@ public class UpdateFromRegistry implements Runnable{
 			WebServiceBean wb =  new WebServiceBean();
 			for(int j = 0; j< node.getLength();j++) {
 				if("name".equalsIgnoreCase(node.item(j).getNodeName())) {
-					wb.setName(node.item(j).getNodeValue());
+					wb.setName(node.item(j).getTextContent());
 				}else if("IPAddress".equalsIgnoreCase(node.item(j).getNodeName())) {
-					wb.setIPAddress(node.item(j).getNodeValue());
+					wb.setIPAddress(node.item(j).getTextContent());
 				}else if("WSDLLocation".equalsIgnoreCase(node.item(j).getNodeName())) {
-					wb.setWSDLLocation(node.item(j).getNodeValue());
+					wb.setWSDLLocation(node.item(j).getTextContent());
 				}
 			}
 			wbList.add(wb);

@@ -10,35 +10,47 @@ import com.umbc.aos.ws.WebServiceClient;
 public class AdditionImpl implements AdditionInterface{
 	static {
 		try {
-			String registry1 = "http://192.168.0.7:8080/WebRegistry/Registry?wsdl";
-			String registry2 = "http://192.168.0.12:8080/WebRegistry/Registry?wsdl";
+//			String registry1 = "http://192.168.0.7:8080/WebRegistry/Registry?wsdl";
+//			String registry2 = "http://192.168.0.12:8080/WebRegistry/Registry?wsdl";
 			
-            if(isRegistryReachable("192.168.0.50")) {
-            	WebServiceClient.addServicetoRegistry(registry1, "add");
-            }
-            else if(isRegistryReachable("192.168.0.60")) {
-            	WebServiceClient.addServicetoRegistry(registry2, "add");
-            }
-            else {
-            	System.out.println("All the registries are currently down. Please try again later");
-            }
-		} catch (Exception e) {
+			String[] registries = Utils.getProperty("config").split(",");
+			int count = 0;
+			for(String ip:registries) {
+				String registry = "http://"+ ip + "/WebRegistry/Registry?wsdl";
+				if(isRegistryReachable(ip.split(":")[0], ip.split(":")[1])) {
+	            	WebServiceClient.addServicetoRegistry(registry, "add");
+	            	break;
+				}
+				else {
+					count++;
+					System.out.println("Registry with ip and port " +ip+ " is not reachable" );
+				}
+				if(count==registries.length) {
+					System.out.println("All the registries are currently down. Please try again later");
+				}
+			
+//            if(isRegistryReachable("192.168.0.7")) {
+//            	WebServiceClient.addServicetoRegistry(registry1, "add");
+//            }
+//            else if(isRegistryReachable("192.168.0.12")) {
+//            	WebServiceClient.addServicetoRegistry(registry2, "add");
+//            }
+//            else {
+//            	System.out.println("All the registries are currently down. Please try again later");
+//            }
+				}
+			} catch (Exception e) {
 			// TODO Auto-generated catch block
 			System.out.println("AdditionImpl static block failed");
-			
-//			e.printStackTrace();
+			e.printStackTrace();
 		}
 	}
-	
-	public static boolean isRegistryReachable(String ip) {
-//		boolean reachable = InetAddress.getByName(ip).isReachable(100);
-//		InetAddress address = InetAddress.getByName(ip);
-//		boolean reachable = address.isReachable(100);
-//        return reachable;
+	public static boolean isRegistryReachable(String ip, String port) {
 		try {
 		Socket soc = new Socket();
-		SocketAddress endpoint = new InetSocketAddress(ip, 8080);
+		SocketAddress endpoint = new InetSocketAddress(ip, Integer.parseInt(port));
 		soc.connect(endpoint, 1000);
+		soc.close();
 		return true;
 		}
 		catch (Exception e) {

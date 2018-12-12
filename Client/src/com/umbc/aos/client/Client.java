@@ -52,7 +52,7 @@ public class Client{
         
 		String[] x = tns.split("//");
 		String[] y = x[1].split("\\.");
-        System.out.println();
+//        System.out.println();
         
 	    QName serviceName1 = new QName(tns, serviceName);
 	    QName portName = new QName(tns, servicePort);
