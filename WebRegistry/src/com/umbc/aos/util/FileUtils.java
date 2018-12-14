@@ -17,8 +17,8 @@ import java.util.Properties;
 import com.umbc.aos.beans.WebServiceBean;
 
 public class FileUtils {
-	private static final String FILENAME = FileUtils.class.getProtectionDomain().getCodeSource().getLocation().getPath()+ "\\Registry4.txt";
-
+//	private static final String FILENAME = FileUtils.class.getProtectionDomain().getCodeSource().getLocation().getPath()+ "\\Registry4.txt";
+	private static final String FILENAME = "Registry.txt";
 	public static Map<String, List<WebServiceBean>> loadChangesFromFile(){
 		Map<String, List<WebServiceBean>> serviceMap = null;
 		try {
@@ -73,6 +73,7 @@ public class FileUtils {
 			{
 				return true;
 			} else {
+//				System.out.println(file.getAbsolutePath());
 				return false;
 			}
 		} catch (IOException e) {

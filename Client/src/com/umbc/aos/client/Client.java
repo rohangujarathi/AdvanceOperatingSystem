@@ -15,7 +15,7 @@ import javax.xml.ws.soap.SOAPBinding;
 import com.predic8.wsdl.*;
 
 public class Client{
-//	public static void main(String[] args) throws Exception{
+	//This method gets the response from the load balancer and returns it as a soap body
 	public SOAPBody getResponse(String wsdl, String arg0, String arg1, String arg2) throws Exception{
 		String operationName = null; 
 		String tns = null;
@@ -23,9 +23,6 @@ public class Client{
 		String servicePort = null;
 		String request = null;
 		SOAPMessage response;
-//		String wsdl = "http://localhost:8080/AdditionWS/AddNumbers?wsdl";
-//		int arg0 = 2;
-//		int arg1 = 3;
 		WSDLParser parser = new WSDLParser();
         Definitions defs = parser.parse(wsdl);
         tns = defs.getTargetNamespace();
@@ -41,47 +38,26 @@ public class Client{
               operationName = bop.getName();
         }
         }
-//        System.out.println("Operation_Name: ");
-//        System.out.println(operationName);
-//        System.out.println("tns: ");
-//        System.out.println(tns);
-//        System.out.println("service_Name: ");
-//        System.out.println(serviceName);
-//        System.out.println("port_Name: ");
-//        System.out.println(servicePort);
-        
 		String[] x = tns.split("//");
-		String[] y = x[1].split("\\.");
-//        System.out.println();
-        
+		String[] y = x[1].split("\\.");        
 	    QName serviceName1 = new QName(tns, serviceName);
 	    QName portName = new QName(tns, servicePort);
 	    
+	    //Call web service
 	    if(arg2==null){
 	    	request = generateRequestXML(tns, operationName, arg0, arg1, y[0]);
 	    	response = invoke(serviceName1, portName, wsdl, operationName, request);
-	    	
 	    }
+	    //call load balancer
 	    else{
 	    	request = generateRequestXML(tns, arg2);
 	    	response = invoke(serviceName1, portName, wsdl, operationName, request);
-	    	
 	    }
 	    SOAPBody body = response.getSOAPBody();
-//        SOAPMessage response = invoke(serviceName1, portName, wsdl, operationName, request);
-	    
-//	    System.out.println(body.getFirstChild().getFirstChild().getTextContent());
-//	    if (body.hasFault()) {
-//	        System.out.println(body.getFault());
-//	    } else {
-//	        BufferedOutputStream out = new BufferedOutputStream(System.out);
-//	        response.writeTo(out);
-//	        out.flush();
-//	        System.out.println();
-//	    }  
 	    return body;
 	}
 	
+	//Generate request XML for requested service
 	public String generateRequestXML(String tns, String operationName, String arg0, String arg1, String operator){
         String request = "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:" + operator + "=\""+ tns + "\">"
      		   +"<soapenv:Header/>"
@@ -96,6 +72,7 @@ public class Client{
         return request;
 	}
 	
+	//Generate request XML for load balancer
 	public String generateRequestXML(String tns, String arg0){
         String request = "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ser=\""+ tns + "\">"
      		   +"<soapenv:Header/>"
@@ -109,7 +86,7 @@ public class Client{
         return request;
 	}
 	
-	
+	//This method will fetch the response from the service and returns it in the form of SOAP message
 	public static SOAPMessage invoke(QName serviceName, QName portName, String endpointUrl, 
             String soapActionUri, String data) throws Exception {
         Service service = Service.create(serviceName);

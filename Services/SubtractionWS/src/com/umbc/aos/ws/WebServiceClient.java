@@ -2,7 +2,6 @@ package com.umbc.aos.ws;
 
 
 import java.io.StringReader;
-import java.net.InetAddress;
 import javax.xml.namespace.QName;
 import javax.xml.soap.MessageFactory;
 import javax.xml.soap.SOAPMessage;
@@ -18,12 +17,13 @@ public class WebServiceClient {
 	public static void addServicetoRegistry(String registrywsdl, String name) throws Exception{
 		try {
 			String port = Utils.getProperty("servicePort");
-		InetAddress ip = InetAddress.getLocalHost();
-		String ipaddress = ip.getHostAddress()+':'+ port;
+			String ip = Utils.getProperty("serviceIP");
+//		InetAddress ip = InetAddress.getLocalHost();
+		String ipaddress = ip+':'+ port;
 		String serviceName = name;
 		QName qserviceName = new QName("http://ws.aos.umbc.com/", "RegistryServiceImplService");
 	    QName portName = new QName("http://ws.aos.umbc.com/", "RegistryServiceImplPort");
-	    String servicewsdl = "http://"+ip.getHostAddress()+":" + port + "/SubtractionWS/SubtractNumbers?wsdl";
+	    String servicewsdl = "http://"+ip+":" + port + "/SubtractionWS/SubtractNumbers?wsdl";
     	String request = generateRequestXML(servicewsdl, ipaddress, serviceName);
     	invoke(qserviceName, portName, registrywsdl, "AddService", request);
 	}

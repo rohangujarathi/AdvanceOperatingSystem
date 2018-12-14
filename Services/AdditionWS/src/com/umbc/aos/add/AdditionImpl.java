@@ -10,9 +10,6 @@ import com.umbc.aos.ws.WebServiceClient;
 public class AdditionImpl implements AdditionInterface{
 	static {
 		try {
-//			String registry1 = "http://192.168.0.7:8080/WebRegistry/Registry?wsdl";
-//			String registry2 = "http://192.168.0.12:8080/WebRegistry/Registry?wsdl";
-			
 			String[] registries = Utils.getProperty("config").split(",");
 			int count = 0;
 			for(String ip:registries) {
@@ -28,17 +25,7 @@ public class AdditionImpl implements AdditionInterface{
 				if(count==registries.length) {
 					System.out.println("All the registries are currently down. Please try again later");
 				}
-			
-//            if(isRegistryReachable("192.168.0.7")) {
-//            	WebServiceClient.addServicetoRegistry(registry1, "add");
-//            }
-//            else if(isRegistryReachable("192.168.0.12")) {
-//            	WebServiceClient.addServicetoRegistry(registry2, "add");
-//            }
-//            else {
-//            	System.out.println("All the registries are currently down. Please try again later");
-//            }
-				}
+			}
 			} catch (Exception e) {
 			// TODO Auto-generated catch block
 			System.out.println("AdditionImpl static block failed");

@@ -13,10 +13,9 @@ import com.umbc.aos.util.RegistryUtil;
 import com.umbc.aos.util.SyncOtherWebservices;
 
 public class Registry {
-	//map containing entry for each service as <Service Name> : <name, ipaddress, wsdllocation>
 	private static Map<String, List<WebServiceBean>> serviceMap;
 	private static final String FILENAME = Registry.class.getProtectionDomain().getCodeSource().getLocation().getPath()+ "\\Registry4.txt";
-	private static final boolean enableCleaning = false;
+	private static final boolean enableCleaning = true;
 	static
 	{
 		System.out.println("WebRegistry: Initializing Registry..");
@@ -36,7 +35,7 @@ public class Registry {
 		//start Sending the buffered details
 		SyncOtherWebservices sows = new SyncOtherWebservices();
 		Thread t = new Thread(sows);
-		//t.start();
+		t.start();
 	}
 
 

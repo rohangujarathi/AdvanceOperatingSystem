@@ -14,11 +14,12 @@ public class DemoClient {
 	
 	public static void main(String args[]) throws Exception {
 		
-		String lb1 = "http://192.168.0.7:8080/LoadBalancerService/loadService?wsdl";
-		String lb2 = "http://192.168.0.12:8080/LoadBalancerService/loadService?wsdl";
+		String lb1 = "http://130.85.236.226:8081/LoadBalancerService/loadService?wsdl";
+		String lb2 = "http://130.85.233.82:8081/LoadBalancerService/loadService?wsdl";
 		System.out.println("Welcome To our distributed application.");
 		String choice = null;
 		while(choice!="exit") {	
+		try {
 			Scanner sc = new Scanner(System.in);
 			System.out.println("Please select a operation to perform from below");
 			System.out.println("1. Add");
@@ -30,6 +31,7 @@ public class DemoClient {
 			System.out.println("7. LCM");
 			System.out.println("To exit the application, type \"exit\"");
 			choice = sc.next();
+			//To exit the program
 			if(choice.equals("exit")) {
 				break;
 			}
@@ -47,15 +49,15 @@ public class DemoClient {
 			Client c = new Client();
 			operation = findOperation(choice);
 			SOAPBody lbresponse = null;
-			if(isLoadBalancerReachable("192.168.0.7")) {
+			if(isLoadBalancerReachable("130.85.236.226")) {
 				lbresponse = c.getResponse(lb1,arg0,arg1, operation);
 			}
-			else if(isLoadBalancerReachable("192.168.0.12")){
-				System.out.println(lb2);
-				System.out.println(arg0);
-				System.out.println(arg1);
-				System.out.println(operation);
+			else if(isLoadBalancerReachable("130.85.238.82")){
 				lbresponse = c.getResponse(lb2,arg0,arg1, operation);
+			}
+			else {
+				System.out.println("All the load balancers are down. Please try again later");
+				break;
 			}
 			String servicewsdl = lbresponse.getFirstChild().getFirstChild().getTextContent();
 			System.out.println("The wsdl returned by load balancer is");
@@ -66,6 +68,10 @@ public class DemoClient {
 			System.out.println("The value returned by the service is " + ans);
 			System.out.println();
 			System.out.println("......................|||||......................|||||......................");
+		}catch(Exception e) {
+			System.out.println("Could not get the response from the requested service. Please try again later");
+			break;
+		}
 			
 		}
 	}
