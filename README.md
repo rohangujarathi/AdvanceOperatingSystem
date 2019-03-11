@@ -1,5 +1,5 @@
 # AdvanceOperatingSystem
-Distributed Webservice
+A Distributed Webservice with load balancer and service registry functionality
 
 --Requirement
 1.Java - 8
